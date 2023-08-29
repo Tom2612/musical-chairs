@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getConcerts, getConcert, createConcert } = require('../controllers/concertControllers');
+const { getConcerts, getConcert, createConcert, deleteConcert } = require('../controllers/concertControllers');
 
 // '/' routes: get all concerts, post concert
 router.route('/')
@@ -11,7 +11,7 @@ router.route('/')
 router.route('/:id')
     .get(getConcert) // view concert details
     // .patch(updateConcert) // update concert details
-    // .delete(deleteConcert) // delete concert
+    .delete(deleteConcert) // delete concert
 
 router.get('/:id/edit', getConcert) // view editable concert details
 

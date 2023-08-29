@@ -49,4 +49,18 @@ module.exports.createConcert = async (req, res) => {
 // update concert
 
 //delete concert
+module.exports.deleteConcert = async (req, res) => {
+    const { id } = req.params;
 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({error: 'No such concert'});
+    }
+
+    const concert = await Concert.findOneAndDelete({_id: id});
+
+    if (!concert) {
+        return res.status(404).json({error: 'No such concert'});
+    }
+
+    res.status(200).json(concert);
+}
