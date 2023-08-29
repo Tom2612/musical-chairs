@@ -7,13 +7,14 @@ export interface IState {
         location: string,
         payStatus: boolean,
         pieces: {title: string, composer: string}[],
-        instruments: string[]
+        instruments: string[],
+        createdAt: string
     }[]
 }
 
 export default function ViewAllConcerts(): JSX.Element {
 
-    const [concerts, setConcerts] = useState<IState['concerts']>();
+    const [concerts, setConcerts] = useState<IState['concerts']>([]);
 
     useEffect(() => {
         const fetchConcerts = async () => {
@@ -31,7 +32,7 @@ export default function ViewAllConcerts(): JSX.Element {
 
     return (
         <div>
-            View all concerts:
+            <h1>View all concerts:</h1>
             <Concert concerts={concerts}/>
         </div>
     )
