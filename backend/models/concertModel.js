@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const concertSchema = new Schema({
-    group: { type: Schema.Types.ObjectId, ref: 'Group' },
+    // group: { type: Schema.Types.ObjectId, ref: 'Group' },
     date: { type: Date, required: true },
     location: { type: String, required: true },
     payStatus: { type: Boolean, required: true },

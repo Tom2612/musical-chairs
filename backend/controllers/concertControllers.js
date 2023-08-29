@@ -28,7 +28,22 @@ module.exports.getConcert = async (req, res) => {
 
 // create concert
 module.exports.createConcert = async (req, res) => {
-    
+
+    const newConcert = {
+        date: new Date(req.body.date),
+        location: req.body.location,
+        payStatus: req.body.payStatus,
+        pieces: req.body.pieces,
+        instruments: req.body.instruments
+    }
+
+    try {
+        const concert = await Concert.create(newConcert);
+        res.status(200).json(concert);
+    } catch (error) {
+        res.status(400).json({error: error.message})
+    }
+
 }
 
 // update concert
