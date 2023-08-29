@@ -11,7 +11,7 @@ app.use((req, res, next) => {
 })
 
 // Routes
- 
+
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
