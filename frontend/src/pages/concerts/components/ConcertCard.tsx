@@ -1,6 +1,7 @@
 import { IState as Props } from '../ViewAllConcerts';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import format from 'date-fns/format';
+import { useNavigate } from 'react-router-dom';
 
 interface IProps {
     concerts: Props['concerts']
@@ -8,10 +9,13 @@ interface IProps {
 
 const ConcertCard: React.FC<IProps> = ({ concerts }) => {
 
+    const navigate = useNavigate();
+
     const renderConcerts = (): JSX.Element[] => {
         return concerts.map(concert => {
             return (
-                <div className='concert-card'>
+                <div className='concert-card' onClick={() => navigate(`/concerts/${concert._id}`)}>
+                    <p>{concert._id}</p>
                     {/* <h4>{concert.group.name}</h4> */}
                     <h3>Date: {format(new Date(concert.date), 'PP')}</h3>
                     <h2>{concert.location}</h2>

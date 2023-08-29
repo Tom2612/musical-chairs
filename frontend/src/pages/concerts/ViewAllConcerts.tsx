@@ -3,6 +3,7 @@ import ConcertCard from './components/ConcertCard';
 
 export interface IState {
     concerts: {
+        _id: string,
         date: string,
         location: string,
         payStatus: boolean,
