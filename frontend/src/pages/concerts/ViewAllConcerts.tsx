@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
+import Concert from './components/Concert';
 
-interface IState {
-    concert: {
+export interface IState {
+    concerts: {
         date: string,
         location: string,
         payStatus: boolean,
-        pieces: object[],
+        pieces: {title: string, composer: string}[],
         instruments: string[]
     }[]
 }
 
 export default function ViewAllConcerts(): JSX.Element {
 
-    const [concerts, setConcerts] = useState<IState>();
+    const [concerts, setConcerts] = useState<IState['concerts']>();
 
     useEffect(() => {
         const fetchConcerts = async () => {
@@ -30,7 +31,8 @@ export default function ViewAllConcerts(): JSX.Element {
 
     return (
         <div>
-            View all concerts
+            View all concerts:
+            <Concert concerts={concerts}/>
         </div>
     )
 }
