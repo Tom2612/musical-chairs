@@ -1,7 +1,13 @@
-import React from 'react'
-
-export default function Navbar() {
+const Navbar = (): JSX.Element =>{
   return (
-    <div>Navbar</div>
+    <div>
+        <h2>Routes:</h2>
+        <ul>
+            <li><a href='/concerts'>All Concerts</a></li>
+            <li><a href='/new'>New Concert</a></li>
+        </ul>
+    </div>
   )
 }
+
+export default Navbar;

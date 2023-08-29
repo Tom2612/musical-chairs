@@ -6,7 +6,7 @@ interface IProps {
     concerts: Props['concerts']
 }
 
-const Concert: React.FC<IProps> = ({ concerts }) => {
+const ConcertCard: React.FC<IProps> = ({ concerts }) => {
 
     const renderConcerts = (): JSX.Element[] => {
         return concerts.map(concert => {
@@ -52,4 +52,4 @@ const Concert: React.FC<IProps> = ({ concerts }) => {
     )
 }
 
-export default Concert;
+export default ConcertCard;

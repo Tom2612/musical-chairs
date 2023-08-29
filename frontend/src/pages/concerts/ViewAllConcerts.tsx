@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Concert from './components/Concert';
+import ConcertCard from './components/ConcertCard';
 
 export interface IState {
     concerts: {
@@ -23,6 +23,7 @@ export default function ViewAllConcerts(): JSX.Element {
 
             if (response.ok) {
                 setConcerts(json);
+                console.log(json)
             }
         }
 
@@ -33,7 +34,7 @@ export default function ViewAllConcerts(): JSX.Element {
     return (
         <div>
             <h1>View all concerts:</h1>
-            <Concert concerts={concerts}/>
+            <ConcertCard concerts={concerts}/>
         </div>
     )
 }
