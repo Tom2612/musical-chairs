@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express from "express";
 const cors = require('cors');
-const concertRouter = require('./routes/concerts');
+import router from './routes/api';
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.use((req, res, next) => {
 })
 
 // Routes
-app.use('/api/concerts', concertRouter);
+app.use('/api', router);
 
 app.use('*', (req, res) => {
     res.json({ error: "Not found" }).status(400)

@@ -1,15 +1,17 @@
+import { Request, Response } from 'express'
 import mongoose from "mongoose";
 import Concert from '../models/concert.model'
 
 // get all concerts
-export const getConcerts = async (req, res) => {
+export const getConcerts = async (req:Request, res:Response) => {
+    // should only return upcoming concerts, not past ones
     const concerts = await Concert.find();
-
+    console.log(concerts)
     res.status(200).json(concerts);
 }
 
 // get one concert
-export const getConcert = async (req, res) => {
+export const getConcert = async (req:Request, res:Response) => {
     const { id } = req.params;
 
     if(!mongoose.Types.ObjectId.isValid(id)) {
@@ -27,7 +29,7 @@ export const getConcert = async (req, res) => {
 }
 
 // create concert
-export const createConcert = async (req, res) => {
+export const createConcert = async (req:Request, res:Response) => {
     try {
         const concert = await Concert.create(req.body);
         res.status(200).json(concert);
@@ -40,7 +42,7 @@ export const createConcert = async (req, res) => {
 // update concert
 
 //delete concert
-export const deleteConcert = async (req, res) => {
+export const deleteConcert = async (req:Request, res:Response) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
