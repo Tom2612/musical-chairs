@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Concert = require('../models/concertModel');
+const Concert = require('../models/concert.model');
 
 // get all concerts
 module.exports.getConcerts = async (req, res) => {
