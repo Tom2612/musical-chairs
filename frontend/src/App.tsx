@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ViewAllConcerts from './pages/concerts/ViewAllConcerts';
+import ViewAllConcerts from './app/ViewAllConcerts';
 import ViewConcert from './pages/concerts/ViewConcert';
-import NewConcert from './pages/concerts/NewConcert';
+import NewConcert from './app/NewConcert';
 import Navbar from './components/Navbar';
 
 function App(): JSX.Element {

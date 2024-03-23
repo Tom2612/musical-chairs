@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use((req, res, next) => {
-    console.log(req.path, req.method);
+    console.log(req.method, req.path);
     next();
 })
 
@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 app.use('/api', router);
 
 app.use('*', (req, res) => {
-    res.json({ error: "Not found" }).status(400)
+    res.json({ error: "Not found" }).status(404)
 })
 
 export default app

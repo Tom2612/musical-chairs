@@ -1,4 +1,4 @@
-import NewConcertForm from "./components/NewConcertForm";
+import NewConcertForm from "../forms/NewConcertForm";
 
 
 const NewConcert = (): JSX.Element => {

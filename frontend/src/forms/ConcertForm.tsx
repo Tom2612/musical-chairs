@@ -1,21 +1,8 @@
 import { useState } from "react";
+import { IConcert } from '../../../backend/src/models/concert.model';
 
-interface concert {
-    date: string,
-    location: string,
-    payStatus: string,
-    instruments: string[],
-    pieces: {composer: string, title: string}[]
-}
-
-const NewConcertForm = () => {
-    const [concert, setConcert] = useState<concert>({
-        date: '',
-        location: '',
-        payStatus: '',
-        instruments: [],
-        pieces: []
-    });
+const ConcertForm = () => {
+    const [concert, setConcert] = useState<IConcert>();
 
     const [piece, setPiece] = useState<{composer: '', title: ''}[]>([{
         composer: '',

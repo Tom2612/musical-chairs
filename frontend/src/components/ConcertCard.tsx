@@ -1,4 +1,4 @@
-import { IState as Props } from '../ViewAllConcerts';
+import { IState as Props } from '../app/ViewAllConcerts';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import format from 'date-fns/format';
 import { useNavigate } from 'react-router-dom';

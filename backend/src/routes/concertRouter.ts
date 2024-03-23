@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { createConcert, deleteConcert, getConcert, getConcerts } from '../controllers/concertControllers';
+
 const router = Router();
 
 router.route('/')
@@ -11,5 +12,5 @@ router.route('/:id')
     // .post(updateConcert) // update concert details
     .delete(deleteConcert)
 
-router.get('/:id/edit', getConcert)
+// router.get('/:id/edit', getConcert)
 export default router

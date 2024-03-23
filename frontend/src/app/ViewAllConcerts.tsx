@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import ConcertCard from './components/ConcertCard';
+import ConcertCard from '../components/ConcertCard';
 
 export interface IState {
     concerts: {
@@ -19,7 +19,7 @@ export default function ViewAllConcerts(): JSX.Element {
 
     useEffect(() => {
         const fetchConcerts = async () => {
-            const response = await fetch('http://localhost:3000/api/concerts/');
+            const response = await fetch('http://localhost:3000/api/concert/');
             const json = await response.json();
 
             if (response.ok) {
