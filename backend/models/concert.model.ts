@@ -2,6 +2,23 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
+interface IPieces {
+    composer: string
+    title: string
+}
+
+interface IConcert {
+    date: Date
+    location: string
+    payStatus: boolean
+    pieces: IPieces[]
+    instruments: string[]
+    active: boolean
+    createdAt: Date
+    updatedAt: Date
+    _id: string
+}
+
 const concertSchema = new Schema({
     // group: { type: Schema.Types.ObjectId, ref: 'Group' },
     date: { type: Date, required: true },
