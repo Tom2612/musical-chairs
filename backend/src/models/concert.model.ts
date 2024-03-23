@@ -1,13 +1,11 @@
-const mongoose = require('mongoose');
+import { Schema, model } from "mongoose";
 
-const Schema = mongoose.Schema;
-
-interface IPieces {
+export interface IPieces {
     composer: string
     title: string
 }
 
-interface IConcert {
+export interface IConcert {
     date: Date
     location: string
     payStatus: boolean
@@ -29,4 +27,6 @@ const concertSchema = new Schema({
     active: { type: Boolean, required: true, default: true }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Concert', concertSchema);
+const Concert = model<IConcert>('Concert', concertSchema);
+
+export default Concert;

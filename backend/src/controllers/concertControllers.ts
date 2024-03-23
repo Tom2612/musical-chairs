@@ -1,15 +1,15 @@
-const mongoose = require('mongoose');
-const Concert = require('../models/concert.model');
+import mongoose from "mongoose";
+import Concert from '../models/concert.model'
 
 // get all concerts
-module.exports.getConcerts = async (req, res) => {
-    const concerts = await Concert.find({});
+export const getConcerts = async (req, res) => {
+    const concerts = await Concert.find();
 
     res.status(200).json(concerts);
 }
 
 // get one concert
-module.exports.getConcert = async (req, res) => {
+export const getConcert = async (req, res) => {
     const { id } = req.params;
 
     if(!mongoose.Types.ObjectId.isValid(id)) {
@@ -27,7 +27,7 @@ module.exports.getConcert = async (req, res) => {
 }
 
 // create concert
-module.exports.createConcert = async (req, res) => {
+export const createConcert = async (req, res) => {
 
     const newConcert = {
         date: new Date(req.body.date),
@@ -49,7 +49,7 @@ module.exports.createConcert = async (req, res) => {
 // update concert
 
 //delete concert
-module.exports.deleteConcert = async (req, res) => {
+export const deleteConcert = async (req, res) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {

@@ -1,6 +1,7 @@
-import { Schema, Model } from 'mongoose';
+import { Schema, model } from 'mongoose';
+import { IConcert } from './concert.model'
 
-interface IChair {
+export interface IChair {
     _id: string
     instrument: string
     level: string
@@ -15,5 +16,5 @@ const chairSchema = new Schema<IChair>({
     concert: { type: Schema.Types.ObjectId, ref: 'concert'}
 }, { timestamps: true })
 
-const Chair = new Model('Chair', chairSchema)
-module.exports = Chair
+const Chair = model<IChair>('Chair', chairSchema)
+export default Chair
