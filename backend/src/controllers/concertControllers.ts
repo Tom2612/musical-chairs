@@ -29,11 +29,21 @@ export const getConcert = async (req:Request, res:Response) => {
 
 // create concert
 export const createConcert = async (req:Request, res:Response) => {
-    try {
-        const concert = await Concert.create(req.body);
-        res.status(200).json(concert);
-    } catch (error) {
-        res.status(400).json({error: error.message})
+    console.log(req.params.id, req.body)
+    if (req.params.id === 'new') {
+        try {
+            await Concert.create(req.body);
+            return res.status(200).json({ message: 'success' });
+        } catch (error) {
+            return res.status(400).json({error: error.message})
+        }
+    } else {
+        try {
+            await Concert.findByIdAndUpdate(req.params.id, req.body);
+            return res.status(200).json({ message: 'success' })
+        } catch (error) {
+            return res.status(400).json({error: error.message})
+        }
     }
 
 }

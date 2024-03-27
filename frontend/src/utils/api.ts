@@ -47,6 +47,8 @@ export async function api<T, U = undefined>(endpoint: string, body?: U): Promise
 
     const method = body ? 'POST' : 'GET';
     const requestBody = body ? JSON.stringify(body) : null
+
+    console.log(requestBody)
     
     return await fetch(`${import.meta.env.VITE_API_URL}/${endpoint}`, {
         method,

@@ -5,11 +5,10 @@ const router = Router();
 
 router.route('/')
     .get(getConcerts)
-    .post(createConcert)
     
 router.route('/:id')
     .get(getConcert)
-    // .post(updateConcert) // update concert details
+    .post(createConcert) // update concert details
     .delete(deleteConcert)
 
 // router.get('/:id/edit', getConcert)

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { IConcert, IPiece } from '../../../backend/src/models/concert.model';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../utils/api";
 
 export default function ConcertForm() {
@@ -14,7 +14,9 @@ export default function ConcertForm() {
         composer: '',
         title: ''
     });
+    const [pieces, setPieces] = useState<IPiece[]>([]);
     const [step, setStep] = useState(1);
+    const navigate = useNavigate();
     const params = useParams();
     const id = params.id ?? 'new';
 
@@ -28,6 +30,9 @@ export default function ConcertForm() {
 
     },[id]);
 
+    useEffect(() => {
+        console.log(concert)
+    }, [concert])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setConcert({
@@ -43,17 +48,26 @@ export default function ConcertForm() {
         })
     };
 
-    const handleCreateConcert = () => {
+    const handleAddPiece = () => {
+        setPieces(pieces.concat(piece))
+        setPiece({ composer: '', title: '' })
+    }
+
+    const handleCreateConcert = (e:Event) => {
+        e.preventDefault()
         setConcert({
             ...concert,
-            pieces: {...piece},
+            pieces,
         })
+        api(`concerts/${id}`, concert);
+        navigate('/');
     }
 
     return (
         <form>
             {step === 1 && <div>
                 <h2>Step 1 - Concert Information</h2>
+                <label htmlFor="date">Date of concert</label>
                 <input 
                     type='date' 
                     name='date'
@@ -61,14 +75,16 @@ export default function ConcertForm() {
                     min={new Date().toISOString().split('T')[0]}
                     onChange={handleChange}
                 />
+                <label htmlFor="location">Location of concert</label>
                 <input 
                     type='text' 
                     name='location'
                     value={concert.location}
                     onChange={handleChange}
                 />
+                <label htmlFor="payStatus">Financial</label>
                 <select
-                    name='finance'
+                    name='payStatus'
                     value={concert.payStatus}
                     onChange={handleChange}
                 >
@@ -78,24 +94,38 @@ export default function ConcertForm() {
                     <option value='negotiable'>Negotiable</option>
                     <option value='none'>None</option>
                 </select>
-                <button onClick={() => setStep(2)}>Next step</button>
+                <button type="button" onClick={() => setStep(2)}>Next step</button>
             </div>}
-            {step === 2 && <div>
-                <h2>Step 2 - What pieces are being played?</h2>
-                <input 
-                    type='text'
-                    name='composer'
-                    value={piece.composer}
-                    onChange={handleChangePiece}
-                />
-                <input 
-                    type='text'
-                    name='title'
-                    value={piece.title}
-                    onChange={handleChangePiece}
-                />         
-            </div>}
-            <button onClick={handleCreateConcert}>Create Concert</button>
+
+            {step === 2 && 
+                <div>
+                    <h2>Step 2 - What pieces are being played?</h2>
+                    <label htmlFor="composer">Composer</label>
+                    <input 
+                        type='text'
+                        name='composer'
+                        value={piece.composer}
+                        onChange={handleChangePiece}
+                    />
+                    <label htmlFor="title">Title</label>
+                    <input 
+                        type='text'
+                        name='title'
+                        value={piece.title}
+                        onChange={handleChangePiece}
+                    />
+                    <button type="button" onClick={handleAddPiece}>Add piece</button>
+                    <div>
+                        {pieces.map(piece => (
+                            <div>
+                                <h3>{piece.composer}</h3>
+                                <h3>{piece.title}</h3>
+                            </div>
+                        ))}
+                    </div>   
+                    <button onClick={handleCreateConcert}>Create Concert</button>
+                </div>
+            }
         </form>
     )
 }
