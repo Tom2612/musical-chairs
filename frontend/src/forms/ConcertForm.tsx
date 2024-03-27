@@ -1,15 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IConcert } from '../../../backend/src/models/concert.model';
+import { useParams } from "react-router-dom";
+import { api } from "../utils/api";
 
-const ConcertForm = () => {
-    const [concert, setConcert] = useState<IConcert>();
+export default function ConcertForm() {
+    const [concert, setConcert] = useState<Partial<IConcert> | null>({
+        date: new Date(),
 
+    });
     const [piece, setPiece] = useState<{composer: '', title: ''}[]>([{
         composer: '',
         title: ''
     }]);
-    const [instruments, setInstruments] = useState<string[]>([]);
-    const [value, setValue] = useState('');
+    const params = useParams();
+    const id = params.id ?? 'new';
+
+    useEffect(() => {
+        id !== 'new' && api<IConcert>(`api/${id}`).then(res => setConcert(res.data ?? null));
+    },[id]);
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setConcert({
@@ -28,14 +37,6 @@ const ConcertForm = () => {
     const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value);
     }
-
-    const handleAddInstrument = () => {
-        setInstruments([
-            ...instruments,
-            value
-        ]);
-        setValue('');
-    };
 
     const handleCreateConcert = () => {
         setConcert({
@@ -82,18 +83,8 @@ const ConcertForm = () => {
                 name='title'
                 value={piece.title}
                 onChange={handleChangePiece}
-            />
-            <input 
-                type='text'
-                name='instruments'
-                value={value}
-                onChange={handleChangeValue}
-            />
-            <button onClick={handleAddInstrument}>Add</button>
-            
+            />            
             <button onClick={handleCreateConcert}>Create Concert</button>
         </form>
     )
 }
-
-export default NewConcertForm;
