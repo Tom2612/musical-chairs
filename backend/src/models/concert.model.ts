@@ -1,16 +1,16 @@
 import { Schema, model } from "mongoose";
 import { IChair } from "./chair.model";
 
-export interface IPieces {
+export interface IPiece {
     composer: string
     title: string
 }
 
 export interface IConcert {
-    date: Date
+    date: string
     location: string
-    payStatus: boolean
-    pieces: IPieces[]
+    payStatus: string
+    pieces: IPiece[]
     instruments: IChair[]
     active: boolean
     createdAt: Date
@@ -20,9 +20,9 @@ export interface IConcert {
 
 const concertSchema = new Schema({
     // group: { type: Schema.Types.ObjectId, ref: 'Group' },
-    date: { type: Date, required: true },
+    date: { type: String, required: true },
     location: { type: String, required: true },
-    payStatus: { type: Boolean, required: true },
+    payStatus: { type: String, required: true },
     pieces: [{ composer: String, title: String }],
     instruments: [{ type: Schema.Types.ObjectId, ref: 'Chair' }],
     active: { type: Boolean, required: true, default: true }

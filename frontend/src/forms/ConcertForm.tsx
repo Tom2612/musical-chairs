@@ -1,22 +1,31 @@
 import { useEffect, useState } from "react";
-import { IConcert } from '../../../backend/src/models/concert.model';
+import { IConcert, IPiece } from '../../../backend/src/models/concert.model';
 import { useParams } from "react-router-dom";
 import { api } from "../utils/api";
 
 export default function ConcertForm() {
-    const [concert, setConcert] = useState<Partial<IConcert> | null>({
-        date: new Date(),
-
+    const [concert, setConcert] = useState<Partial<IConcert>>({
+        date: '',
+        location: '',
+        payStatus: 'none',
+        pieces: [],
     });
-    const [piece, setPiece] = useState<{composer: '', title: ''}[]>([{
+    const [piece, setPiece] = useState<IPiece>({
         composer: '',
         title: ''
-    }]);
+    });
+    const [step, setStep] = useState(1);
     const params = useParams();
     const id = params.id ?? 'new';
 
     useEffect(() => {
-        id !== 'new' && api<IConcert>(`api/${id}`).then(res => setConcert(res.data ?? null));
+        id !== 'new' && api<IConcert>(`api/${id}`).then(res => setConcert(res.data ?? {
+        date: '',
+        location: '',
+        payStatus: 'none',
+        pieces: [],
+    }));
+
     },[id]);
 
 
@@ -34,56 +43,58 @@ export default function ConcertForm() {
         })
     };
 
-    const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(e.target.value);
-    }
-
     const handleCreateConcert = () => {
         setConcert({
             ...concert,
             pieces: {...piece},
-            instruments: instruments
         })
     }
 
     return (
         <form>
-            <input 
-                type='date' 
-                name='date'
-                value={concert.date}
-                min={new Date().toISOString().split('T')[0]}
-                onChange={handleChange}
-            />
-            <input 
-                type='text' 
-                name='location'
-                value={concert.location}
-                onChange={handleChange}
-            />
-            <select
-                name='finance'
-                value={concert.payStatus}
-                onChange={handleChange}
-            >
-                <option>Paid + Travel</option>
-                <option>Paid</option>
-                <option>Travel</option>
-                <option>Negotiable</option>
-                <option>None</option>
-            </select>
-            <input 
-                type='text'
-                name='composer'
-                value={piece.composer}
-                onChange={handleChangePiece}
-            />
-            <input 
-                type='text'
-                name='title'
-                value={piece.title}
-                onChange={handleChangePiece}
-            />            
+            {step === 1 && <div>
+                <h2>Step 1 - Concert Information</h2>
+                <input 
+                    type='date' 
+                    name='date'
+                    value={concert.date}
+                    min={new Date().toISOString().split('T')[0]}
+                    onChange={handleChange}
+                />
+                <input 
+                    type='text' 
+                    name='location'
+                    value={concert.location}
+                    onChange={handleChange}
+                />
+                <select
+                    name='finance'
+                    value={concert.payStatus}
+                    onChange={handleChange}
+                >
+                    <option value='paidAndTravel'>Paid + Travel</option>
+                    <option value='paid'>Paid</option>
+                    <option value='travel'>Travel</option>
+                    <option value='negotiable'>Negotiable</option>
+                    <option value='none'>None</option>
+                </select>
+                <button onClick={() => setStep(2)}>Next step</button>
+            </div>}
+            {step === 2 && <div>
+                <h2>Step 2 - What pieces are being played?</h2>
+                <input 
+                    type='text'
+                    name='composer'
+                    value={piece.composer}
+                    onChange={handleChangePiece}
+                />
+                <input 
+                    type='text'
+                    name='title'
+                    value={piece.title}
+                    onChange={handleChangePiece}
+                />         
+            </div>}
             <button onClick={handleCreateConcert}>Create Concert</button>
         </form>
     )
