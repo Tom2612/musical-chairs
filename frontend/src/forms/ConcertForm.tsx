@@ -34,6 +34,10 @@ export default function ConcertForm() {
         console.log(concert)
     }, [concert])
 
+    useEffect(() => {
+        console.log(pieces)
+    }, [pieces])
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setConcert({
             ...concert,
@@ -53,7 +57,7 @@ export default function ConcertForm() {
         setPiece({ composer: '', title: '' })
     }
 
-    const handleCreateConcert = (e:Event) => {
+    const handleCreateConcert = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         setConcert({
             ...concert,
@@ -61,6 +65,10 @@ export default function ConcertForm() {
         })
         api(`concerts/${id}`, concert);
         navigate('/');
+    }
+
+    const handleRemovePiece = (index: number) => {
+        setPieces(pieces.filter((p, i) => i !== index))
     }
 
     return (
@@ -94,7 +102,7 @@ export default function ConcertForm() {
                     <option value='negotiable'>Negotiable</option>
                     <option value='none'>None</option>
                 </select>
-                <button type="button" onClick={() => setStep(2)}>Next step</button>
+                <button type="button" onClick={() => setStep(2)}>Next</button>
             </div>}
 
             {step === 2 && 
@@ -116,14 +124,16 @@ export default function ConcertForm() {
                     />
                     <button type="button" onClick={handleAddPiece}>Add piece</button>
                     <div>
-                        {pieces.map(piece => (
-                            <div>
-                                <h3>{piece.composer}</h3>
+                        {pieces.map((piece, index) => (
+                            <div key={index}>
+                                <h3 className="font-bold">{piece.composer}</h3>
                                 <h3>{piece.title}</h3>
+                                <p className="underline cursor-pointer" onClick={() => handleRemovePiece(index)}>remove</p>
                             </div>
                         ))}
                     </div>   
-                    <button onClick={handleCreateConcert}>Create Concert</button>
+                    <button onClick={() => setStep(1)}>Back</button>
+                    <button onClick={(e) => handleCreateConcert(e)}>Create Concert</button>
                 </div>
             }
         </form>
