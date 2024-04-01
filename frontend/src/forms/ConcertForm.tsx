@@ -73,37 +73,39 @@ export default function ConcertForm() {
 
     return (
         <form>
-            {step === 1 && <div>
-                <h2>Step 1 - Concert Information</h2>
-                <label htmlFor="date">Date of concert</label>
-                <input 
-                    type='date' 
-                    name='date'
-                    value={concert.date}
-                    min={new Date().toISOString().split('T')[0]}
-                    onChange={handleChange}
-                />
-                <label htmlFor="location">Location of concert</label>
-                <input 
-                    type='text' 
-                    name='location'
-                    value={concert.location}
-                    onChange={handleChange}
-                />
-                <label htmlFor="payStatus">Financial</label>
-                <select
-                    name='payStatus'
-                    value={concert.payStatus}
-                    onChange={handleChange}
-                >
-                    <option value='paidAndTravel'>Paid + Travel</option>
-                    <option value='paid'>Paid</option>
-                    <option value='travel'>Travel</option>
-                    <option value='negotiable'>Negotiable</option>
-                    <option value='none'>None</option>
-                </select>
-                <button type="button" onClick={() => setStep(2)}>Next</button>
-            </div>}
+            {step === 1 && 
+                <div className="rounded shadow">
+                    <h2>Step 1 - Concert Information</h2>
+                    <label htmlFor="date">Date of concert</label>
+                    <input 
+                        type='date' 
+                        name='date'
+                        value={concert.date}
+                        min={new Date().toISOString().split('T')[0]}
+                        onChange={handleChange}
+                    />
+                    <label htmlFor="location">Location of concert</label>
+                    <input 
+                        type='text' 
+                        name='location'
+                        value={concert.location}
+                        onChange={handleChange}
+                    />
+                    <label htmlFor="payStatus">Financial</label>
+                    <select
+                        name='payStatus'
+                        value={concert.payStatus}
+                        onChange={handleChange}
+                    >
+                        <option value='paidAndTravel'>Paid + Travel</option>
+                        <option value='paid'>Paid</option>
+                        <option value='travel'>Travel</option>
+                        <option value='negotiable'>Negotiable</option>
+                        <option value='none'>None</option>
+                    </select>
+                    <button type="button" onClick={() => setStep(2)}>Next</button>
+                </div>
+            }
 
             {step === 2 && 
                 <div>
