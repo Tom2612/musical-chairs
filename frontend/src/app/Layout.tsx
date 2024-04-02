@@ -11,13 +11,29 @@ export default function Layout() {
   )
 }
 
+interface ILink {
+    text: string
+    url:string
+}
+const navLinks: ILink[] = [
+    { text: 'Concerts', url: 'concerts' },
+    { text: 'New Concert', url: 'concerts/new' },
+]
+
+function HeaderLink({ link }: { link: ILink }) {
+    return (
+        <a className='hover:font-bold' href={link.url}>{link.text}</a>
+    )
+}
+
 function Header() {
     return (
         <div className='p-5 bg-blue-300 flex items-center justify-center'>
             <h1 className='text-3xl font-bold'>Musical Chairs</h1>
             <div className='flex-1 flex justify-center space-x-5'>
-                <a href='/concerts'>Concerts</a>
-                <a href='/concerts/new'>New Conert</a>
+                {navLinks.map(link => (
+                    <HeaderLink link={link} />
+                ))}
             </div>
             <div>User</div>
         </div>
