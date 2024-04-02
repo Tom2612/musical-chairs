@@ -7,6 +7,7 @@ export interface IPiece {
 }
 
 export interface IConcert {
+    _id: string
     date: string
     location: string
     payStatus: string
@@ -15,7 +16,6 @@ export interface IConcert {
     active: boolean
     createdAt: Date
     updatedAt: Date
-    _id: string
 }
 
 const concertSchema = new Schema({
@@ -23,7 +23,15 @@ const concertSchema = new Schema({
     date: { type: String, required: true },
     location: { type: String, required: true },
     payStatus: { type: String, required: true },
-    pieces: [{ composer: String, title: String }],
+    pieces: [{
+        _id: false,
+        composer: { 
+            type: String,
+        }, 
+        title: { 
+            type: String,
+        } 
+    }],
     instruments: [{ type: Schema.Types.ObjectId, ref: 'Chair' }],
     active: { type: Boolean, required: true, default: true }
 }, { timestamps: true });

@@ -16,27 +16,23 @@ export default function ConcertForm() {
     });
     const [pieces, setPieces] = useState<IPiece[]>([]);
     const [step, setStep] = useState(1);
+    const [error, setError] = useState('');
     const navigate = useNavigate();
     const params = useParams();
     const id = params.id ?? 'new';
 
     useEffect(() => {
-        id !== 'new' && api<IConcert>(`api/${id}`).then(res => setConcert(res.data ?? {
-        date: '',
-        location: '',
-        payStatus: 'none',
-        pieces: [],
-    }));
+        id !== 'new' && api<IConcert>(`concert/${id}`).then(res => {
+            setConcert(res.data ?? {
+                date: '',
+                location: '',
+                payStatus: 'none',
+                pieces: [],
+            });
+            setPieces(res.data?.pieces ?? []);
+        });
 
     },[id]);
-
-    useEffect(() => {
-        console.log(concert)
-    }, [concert])
-
-    useEffect(() => {
-        console.log(pieces)
-    }, [pieces])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setConcert({
@@ -57,14 +53,29 @@ export default function ConcertForm() {
         setPiece({ composer: '', title: '' })
     }
 
+    const checkSteps = () => {
+        if (step === 1) {
+            if (!concert.date || !concert.location || !concert.payStatus) {
+                setError('Please complete all fields.')
+                return false
+            }
+        }
+        if (step === 2) {
+            if (pieces.length === 0) {
+                setError('Please complete all fields.')
+                return false
+            }
+        }
+        setError('')
+        return true            
+    }
+
     const handleCreateConcert = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-        setConcert({
-            ...concert,
-            pieces,
+        if (!checkSteps()) return
+        api(`concert/${id}`, { concert: { ...concert, pieces } }).then((x: any) => {
+            navigate(`/concerts/${x.data?.message}` ?? '/');
         })
-        api(`concerts/${id}`, concert);
-        navigate('/');
     }
 
     const handleRemovePiece = (index: number) => {
@@ -72,7 +83,7 @@ export default function ConcertForm() {
     }
 
     return (
-        <form className="p-10 rounded shadow flex flex-col space-y-5">
+        <form className="p-10 rounded shadow flex flex-col space-y-5 max-w-4xl mx-auto">
             <h1 className="font-bold text-2xl">Create Concert</h1>
             {step === 1 && 
                 <>
@@ -117,7 +128,16 @@ export default function ConcertForm() {
                                 <option value='none'>None</option>
                             </select>
                         </div>
-                        <button className="bg-blue-500 px-5 py-1 h-fit self-center hover:bg-blue-600 rounded font-bold text-white" type="button" onClick={() => setStep(2)}>Next</button>
+                        <div className="text-right">
+                            {error && <p className="text-red-500">{error}</p>}
+                            <button 
+                                className="bg-blue-500 px-5 py-1 h-fit self-center hover:bg-blue-600 rounded font-bold text-white" 
+                                type="button" 
+                                onClick={() => {
+                                    if (checkSteps()) return setStep(2)
+                                }}
+                            >Next</button>
+                        </div>
                     </div>
                 </>
             }
@@ -159,9 +179,12 @@ export default function ConcertForm() {
                             </div>
                         ))}
                     </div>
-                    <div className="flex justify-end space-x-5">
-                        <button className="px-5 py-1 rounded h-fit bg-blue-500 text-white font-bold hover:bg-blue-600" onClick={() => setStep(1)}>Back</button>
-                        <button className="px-5 py-1 rounded h-fit bg-blue-500 text-white font-bold hover:bg-blue-600" onClick={(e) => handleCreateConcert(e)}>Create Concert</button>
+                    <div className="flex flex-col text-right">
+                        {error && <p className="text-red-500">{error}</p>}
+                        <div className="flex justify-end space-x-5">
+                            <button className="px-5 py-1 rounded h-fit text-blue-500 border-2 border-blue-500 font-bold hover:bg-blue-50" onClick={() => setStep(1)}>Back</button>
+                            <button className="px-5 py-1 rounded h-fit bg-blue-500 border-2 border-blue-500 text-white font-bold hover:bg-blue-600" onClick={(e) => handleCreateConcert(e)}>Create Concert</button>
+                        </div>
                     </div>
                 </>
             }

@@ -16,13 +16,13 @@ interface ILink {
     url:string
 }
 const navLinks: ILink[] = [
-    { text: 'Concerts', url: 'concerts' },
-    { text: 'New Concert', url: 'concerts/new' },
+    { text: 'Concerts', url: '/concerts/' },
+    { text: 'New Concert', url: '/concerts/new' },
 ]
 
 function HeaderLink({ link }: { link: ILink }) {
     return (
-        <a className='hover:font-bold' href={link.url}>{link.text}</a>
+        <a key={link.text} className='hover:font-bold' href={link.url}>{link.text}</a>
     )
 }
 

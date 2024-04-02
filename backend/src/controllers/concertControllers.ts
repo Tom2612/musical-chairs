@@ -32,8 +32,8 @@ export const createConcert = async (req:Request, res:Response) => {
     console.log(req.params.id, req.body)
     if (req.params.id === 'new') {
         try {
-            await Concert.create(req.body);
-            return res.status(200).json({ message: 'success' });
+            const concert = await Concert.create(req.body.concert);
+            return res.status(200).json({ message: concert._id });
         } catch (error) {
             return res.status(400).json({error: error.message})
         }
