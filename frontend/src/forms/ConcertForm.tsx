@@ -22,7 +22,7 @@ export default function ConcertForm() {
     const id = params.id ?? 'new';
 
     useEffect(() => {
-        id !== 'new' && api<IConcert>(`concert/${id}`).then(res => {
+        id !== 'new' && api<IConcert>(`concerts/${id}`).then(res => {
             setConcert(res.data ?? {
                 date: '',
                 location: '',
@@ -73,7 +73,7 @@ export default function ConcertForm() {
     const handleCreateConcert = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         if (!checkSteps()) return
-        api(`concert/${id}`, { concert: { ...concert, pieces } }).then((x: any) => {
+        api(`concerts/${id}`, { concert: { ...concert, pieces } }).then((x: any) => {
             navigate(`/concerts/${x.data?.message}` ?? '/');
         })
     }

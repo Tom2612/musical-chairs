@@ -1,41 +1,33 @@
 import { useState, useEffect } from 'react';
 import ConcertCard from '../components/ConcertCard';
+import { IConcert } from '../../../backend/src/models/concert.model';
+import { api } from '../utils/api';
+import Loading from '../components/Loading';
 
-export interface IState {
-    concerts: {
-        _id: string,
-        date: string,
-        location: string,
-        payStatus: boolean,
-        pieces: {title: string, composer: string}[],
-        instruments: string[],
-        createdAt: string
-    }[]
-}
+export default function ViewAllConcerts() {
 
-export default function ViewAllConcerts(): JSX.Element {
-
-    const [concerts, setConcerts] = useState<IState['concerts']>([]);
+    const [concerts, setConcerts] = useState<IConcert[]>([]);
+    
+    const fetchConcerts = async () => {
+        api<IConcert[]>('concerts').then(res => {
+            setConcerts(res.data ?? []);
+        })
+    }
 
     useEffect(() => {
-        const fetchConcerts = async () => {
-            const response = await fetch('http://localhost:3000/api/concert/');
-            const json = await response.json();
-
-            if (response.ok) {
-                setConcerts(json);
-                console.log(json)
-            }
-        }
-
         fetchConcerts();
     }, []);
 
+    if (!concerts) return <Loading />
 
     return (
         <div>
-            <h1>View all concerts:</h1>
-            <ConcertCard concerts={concerts}/>
+            <h1 className='text-3xl font-semibold'>Upcoming concerts:</h1>
+            <div className='grid grid-cols-3 gap-5 py-10'>
+                {concerts.map(concert => (
+                    <ConcertCard key={concert._id} concert={concert} />
+                ))}
+            </div>
         </div>
     )
 }

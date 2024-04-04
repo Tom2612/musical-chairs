@@ -4,7 +4,7 @@ export default function Layout() {
   return (
     <div className='min-h-screen min-w-screen text-gray-900'>
         <Header />
-        <main className='p-10'>
+        <main className='p-10 max-w-6xl border border-black mx-auto'>
             <Outlet></Outlet>
         </main>
     </div>

@@ -1,59 +1,33 @@
-import { IState as Props } from '../app/ViewAllConcerts';
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import format from 'date-fns/format';
 import { useNavigate } from 'react-router-dom';
+import { IConcert } from '../../../backend/src/models/concert.model';
 
-interface IProps {
-    concerts: Props['concerts']
-}
 
-const ConcertCard: React.FC<IProps> = ({ concerts }) => {
-
+export default function ConcertCard ({ concert }: { concert: IConcert }) {
     const navigate = useNavigate();
 
-    const renderConcerts = (): JSX.Element[] => {
-        return concerts.map(concert => {
-            return (
-                <div className='concert-card' onClick={() => navigate(`/concerts/${concert._id}`)}>
-                    <p>{concert._id}</p>
-                    {/* <h4>{concert.group.name}</h4> */}
-                    <h3>Date: {format(new Date(concert.date), 'PP')}</h3>
-                    <h2>{concert.location}</h2>
-                    <p>{concert.payStatus ? 'Paid' : 'Unpaid'}</p>
-                    <ul>
-                        <h3>Programme:</h3>
-                        {renderPieces(concert.pieces)}
-                    </ul>
-                    <ul>
-                        <h3>Looking for:</h3>                       
-                        {renderInstruments(concert.instruments)}
-                    </ul>
-                    <p>Posted: {formatDistanceToNow(new Date(concert.createdAt), {addSuffix: true})}</p>
-                </div>
-            )
-        })
-    }
-
-    const renderPieces = (pieces: {title: string, composer: string}[]): JSX.Element[] => {
-        return pieces.map(piece => {
-            return (
-                <li>{piece.composer}, {piece.title}</li>
-            )
-        })
-    }
-    const renderInstruments = (instruments: string[]): JSX.Element[] => {
-        return instruments.map(instrument => {
-            return (
-                <li>{instrument}</li>
-            )
-        })
-    }
-
     return (
-        <div>
-            {renderConcerts()}
+        <div className='border rounded-xl p-5 cursor-pointer shadow hover:shadow-lg transition-all' onClick={() => navigate(`/concerts/${concert._id}`)}>
+            <h2 className='font-bold text-2xl'>SoAndSo Symphony Orchestra</h2>
+            <div className='flex flex-col space-y-4 items-start my-2'>
+                <div className='flex space-x-3 items-center'>
+                    <span className='material-symbols-outlined flex-shrink-0'>calendar_month</span>
+                    <h2 className='flex-1'>{format(new Date(concert.date), 'dd/MM/yyyy')}</h2>
+                </div>
+                <div className='flex space-x-3 items-center'>
+                    <span className='material-symbols-outlined flex-shrink-0'>location_on</span>
+                    <h2 className='flex-1'>{concert.location}</h2>
+                </div>
+                <div className='flex space-x-3 items-center'>
+                    <span className='material-symbols-outlined flex-shrink-0'>currency_pound</span>
+                    <h2 className='flex-1'>{concert.payStatus}</h2>
+                </div>
+            </div>
+            <div>
+                {concert.instruments.slice(0, 3).map(inst => (
+                    <p>{inst.instrument}</p>
+                ))}
+            </div>
         </div>
     )
 }
-
-export default ConcertCard;

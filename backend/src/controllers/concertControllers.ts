@@ -4,7 +4,6 @@ import Concert from '../models/concert.model'
 
 // get all concerts
 export const getConcerts = async (req:Request, res:Response) => {
-    // should only return upcoming concerts, not past ones
     const concerts = await Concert.find();
     res.status(200).json(concerts);
 }
