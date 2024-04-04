@@ -3,8 +3,9 @@ import ViewAllConcerts from './app/ViewAllConcerts';
 import ViewConcert from './app/ViewConcert';
 import ConcertForm from './forms/ConcertForm';
 import Layout from './app/Layout';
+import Chairs from './app/Chairs';
 
-function App(): JSX.Element {
+function App() {
   
   return (
     <div>
@@ -14,6 +15,7 @@ function App(): JSX.Element {
           <Route index path='/concerts' element={<ViewAllConcerts />}></Route>
           <Route path='/concerts/:id' element={<ViewConcert />}></Route>
           <Route path='/concerts/new' element={<ConcertForm />}></Route>
+          <Route path='/chairs' element={<Chairs />}></Route>
         </Route>
       </Routes>
       </BrowserRouter>

@@ -1,57 +1,64 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import format from 'date-fns/format';
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import { IConcert } from '../../../backend/src/models/concert.model';
+import { api } from '../utils/api';
+import Loading from '../components/Loading';
 
-const ViewConcert = (): JSX.Element => {
-    const [concert, setConcert] = useState({createdAt:'',location:'', date:'',pieces:[{composer:'', title:''}],instruments:[]});
-    const [loading, setLoading] = useState(true);
+export default function ViewConcert () {
+    const [concert, setConcert] = useState<IConcert | null>();
     const { id } = useParams();
+    const navigate = useNavigate();
+
+    const fetchConcert = async () => {
+        api<IConcert>(`concerts/${id}`).then(res => {
+            setConcert(res.data ?? null);
+        })
+    }
 
     useEffect(() => {
-        const fetchConcert = async () => {
-            const response = await fetch(`http://localhost:3000/api/concerts/${id}`);
-            const json = await response.json();
-
-            setConcert(json);
-            setLoading(false);
-            console.log(json);
-        }
-
         fetchConcert();
         
     }, [id]);
 
+    if (!concert) return <Loading />
+
     return (
-        <>
-            {!loading && 
-                <div>
-                    <strong>Posted: </strong><p>{formatDistanceToNow(new Date(concert.createdAt), {addSuffix: true})}</p>
-                    {/* <h2>{concert.group.name}</h2> */}
-                    <h3>Location: {concert.location}</h3>
-                    <h3>Date: {format(new Date(concert.date), 'PP')}</h3>
-                    <div>
-                        <div>
-                            <ul>
-                                <h4>Programme:</h4>
-                                {concert.pieces.map(piece => {
-                                    return <li>{piece.composer}, {piece.title}</li>
-                                })}
-                            </ul>
-                        </div>
-                        <div>
-                            <ul>
-                                <h4>Looking for:</h4>
-                                {concert.instruments.map(instrument => {
-                                    return <li>{instrument}</li>
-                                })}
-                            </ul>
-                        </div>
-                    </div>
+        <div className='border border-black'>
+            <div className='grid grid-cols-1 sm:grid-cols-3 gap-5 place-items-center shadow rounded-xl m-5 p-5'>
+                <div className='flex space-x-3 items-center'>
+                    <span className='material-symbols-outlined flex-shrink-0'>calendar_month</span>
+                    <h2 className='flex-1'>{format(new Date(concert.date), 'dd/MM/yyyy')}</h2>
                 </div>
-            }
-        </>
+                <div className='flex space-x-3 items-center'>
+                    <span className='material-symbols-outlined flex-shrink-0'>location_on</span>
+                    <h2 className='flex-1'>{concert.location}</h2>
+                </div>
+                <div className='flex space-x-3 items-center'>
+                    <span className='material-symbols-outlined flex-shrink-0'>currency_pound</span>
+                    <h2 className='flex-1'>{concert.payStatus}</h2>
+                </div>
+            </div>
+            {/* <h2>{concert.group.name}</h2> */}
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
+                <div className='p-5 m-5 shadow rounded-xl'>
+                    {/* <h4 className='font-bold'>Playing</h4> */}
+                    {concert.pieces.map(piece => {
+                        return <p key={piece.composer+piece.title}><span className='font-semibold'>{piece.composer.toUpperCase()}</span> - {piece.title}</p>
+                    })}
+                </div>
+                <div className='p-5 m-5 shadow rounded-xl'>
+                    {concert.instruments.length > 0 && 
+                        <>
+                            <h4>Looking for:</h4>
+                            {concert.instruments.map(instrument => {
+                                return <li>{instrument}</li>
+                            })}
+                        </>
+                    }
+                    <button onClick={() => navigate('/chairs')} className='text-white font-bold mx-auto px-5 py-2 rounded bg-blue-500 hover:bg-blue-600'>{concert.instruments.length > 0 ? 'Add Chairs': 'Start adding chairs'}</button>
+                </div>
+            </div>
+        </div>
     )
 }
-
-export default ViewConcert
