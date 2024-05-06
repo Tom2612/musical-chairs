@@ -4,7 +4,8 @@ import { IConcert } from './concert.model'
 export interface IChair {
     _id: string
     instrument: string
-    level: string
+    level?: string
+    grade?: number
     concert: IConcert
 }
 

@@ -56,7 +56,7 @@ export default function ViewConcert () {
                             })}
                         </>
                     }
-                    <button onClick={() => navigate('/chairs')} className='text-white font-bold mx-auto px-5 py-2 rounded bg-blue-500 hover:bg-blue-600'>{concert.instruments.length > 0 ? 'Add Chairs': 'Start adding chairs'}</button>
+                    <button onClick={() => navigate('/chairs/new')} className='text-white font-bold mx-auto px-5 py-2 rounded bg-blue-500 hover:bg-blue-600'>{concert.instruments.length > 0 ? 'Add Chairs': 'Start adding chairs'}</button>
                 </div>
             </div>
         </div>
