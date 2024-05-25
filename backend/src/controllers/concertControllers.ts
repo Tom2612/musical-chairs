@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import mongoose from "mongoose";
 import Concert from '../models/concert.model'
+import Chair from '../models/chair.model';
 
 // get all concerts
 export const getConcerts = async (req:Request, res:Response) => {
@@ -18,12 +19,13 @@ export const getConcert = async (req:Request, res:Response) => {
     }
 
     const concert = await Concert.findById(id);
+    const chairs = await Chair.find({ concert: id })
 
     if(!concert) {
         res.status(404).json({error: 'Concert not found'})
     }
 
-    res.status(200).json(concert);
+    res.status(200).json({ concert, chairs });
 }
 
 // create concert

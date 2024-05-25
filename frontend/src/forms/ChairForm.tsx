@@ -80,7 +80,7 @@ export default function ChairForm({ concert }: { concert: IConcert }) {
             Prefer {selectChoice ? "grades" : "levels"}?
           </span>
         </div>
-        <button onClick={handleSubmit}>Add</button>
+        <button type='button' onClick={handleSubmit}>Add</button>
       </form>
     );
 }

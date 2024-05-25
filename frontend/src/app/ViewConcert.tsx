@@ -5,15 +5,23 @@ import { IConcert } from '../../../backend/src/models/concert.model';
 import { api } from '../utils/api';
 import Loading from '../components/Loading';
 import ChairForm from '../forms/ChairForm';
+import { IChair } from '../../../backend/src/models/chair.model';
+
+interface IFullConcert extends IConcert {
+    chairs: IChair[]
+}
 
 export default function ViewConcert () {
-    const [concert, setConcert] = useState<IConcert | null>();
+    const [concert, setConcert] = useState<IFullConcert | null>();
     const [chairId, setChairId] = useState<string | null>();
     const { id } = useParams();
 
     const fetchConcert = async () => {
-        api<IConcert>(`concerts/${id}`).then(res => {
-            setConcert(res.data ?? null);
+        api<{ concert: IConcert, chairs: IChair[] }>(`concerts/${id}`).then(res => {
+            if (res.data) {
+                console.log(res.data)
+                setConcert({ ...res.data.concert, chairs: res.data.chairs } ?? null);
+            }
         })
     }
 

@@ -12,7 +12,6 @@ export interface IConcert {
     location: string
     payStatus: string
     pieces: IPiece[]
-    instruments: IChair[]
     active: boolean
     createdAt: Date
     updatedAt: Date
@@ -32,7 +31,6 @@ const concertSchema = new Schema({
             type: String,
         } 
     }],
-    instruments: [{ type: Schema.Types.ObjectId, ref: 'Chair' }],
     active: { type: Boolean, required: true, default: true }
 }, { timestamps: true });
 
