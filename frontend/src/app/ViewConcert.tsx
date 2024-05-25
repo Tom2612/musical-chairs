@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import format from 'date-fns/format';
 import { IConcert } from '../../../backend/src/models/concert.model';
 import { api } from '../utils/api';
 import Loading from '../components/Loading';
+import ChairForm from '../forms/ChairForm';
 
 export default function ViewConcert () {
     const [concert, setConcert] = useState<IConcert | null>();
+    const [chairId, setChairId] = useState<string | null>();
     const { id } = useParams();
-    const navigate = useNavigate();
 
     const fetchConcert = async () => {
         api<IConcert>(`concerts/${id}`).then(res => {
@@ -18,7 +19,6 @@ export default function ViewConcert () {
 
     useEffect(() => {
         fetchConcert();
-        
     }, [id]);
 
     if (!concert) return <Loading />
@@ -48,15 +48,8 @@ export default function ViewConcert () {
                     })}
                 </div>
                 <div className='p-5 m-5 shadow rounded-xl'>
-                    {concert.instruments.length > 0 && 
-                        <>
-                            <h4>Looking for:</h4>
-                            {concert.instruments.map(instrument => {
-                                return <li>{instrument}</li>
-                            })}
-                        </>
-                    }
-                    <button onClick={() => navigate('/chairs/new')} className='text-white font-bold mx-auto px-5 py-2 rounded bg-blue-500 hover:bg-blue-600'>{concert.instruments.length > 0 ? 'Add Chairs': 'Start adding chairs'}</button>
+                    <button onClick={() => setChairId('new')} className='text-white font-bold mx-auto px-5 py-2 rounded bg-blue-500 hover:bg-blue-600'>{concert.instruments.length > 0 ? 'Add Chairs': 'Start adding chairs'}</button>
+                    {chairId && <ChairForm concert={concert} />}
                 </div>
             </div>
         </div>

@@ -30,10 +30,11 @@ export const getChair = async (req:Request, res:Response) => {
 // create chair
 export const createChair = async (req:Request, res:Response) => {
     try {
+        console.log(req.body)
         const chair = await Chair.create(req.body);
-        res.status(200).json(chair);
+        res.status(200).json({ message: 'success' });
     } catch (error) {
-        res.status(400).json({error: error.message})
+        res.status(400).json({ error: error.message })
     }
 
 }
