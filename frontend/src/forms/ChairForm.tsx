@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { IChair } from '../../../backend/src/models/chair.model';
+import { IChair, Level } from '../../../backend/src/models/chair.model';
 import { api } from '../utils/api';
 import { IConcert } from '../../../backend/src/models/concert.model';
 import Button from '../components/Button';
+import SelectField from '../components/SelectField';
+import TextField from '../components/TextField';
 
 export default function ChairForm({ concert }: { concert: IConcert }) {
-    const [chair, setChair] = useState<Partial<IChair>>({
+    const [chair, setChair] = useState<IChair>({
         instrument: '',
-        level: '',
+        level: undefined,
         grade: undefined,
         concert: concert._id,
     });
@@ -16,24 +18,26 @@ export default function ChairForm({ concert }: { concert: IConcert }) {
     const params = useParams();
     const { id } = params;
 
-    const levels = [
-      "beginner",
-      "intermediate",
-      "advanced",
-      "semi-professional",
-      "professional",
+    const levelOptions = [
+      { label: "Select a level", value: null },
+      { label: "Beginner", value: Level.Beginner },
+      { label: "Intermediate", value: Level.Intermediate },
+      { label: "Advanced", value: Level.Advanced },
+      { label: "Semi-professional", value: Level.SemiProfessional },
+      { label: "Professional", value: Level.Professional },
     ];
 
     useEffect(() => {
-        setChair({ ...chair, grade: undefined, level: ''})
+        setChair({ ...chair, grade: undefined, level: undefined })
     },[selectChoice])
 
     const handleChange = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+      e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
     ) => {
+      const { value, name } = e.target
       setChair({
         ...chair,
-        [e.target.name]: e.target.value,
+        [name]: value === "" ? null : value,
       });
     };
 
@@ -44,45 +48,35 @@ export default function ChairForm({ concert }: { concert: IConcert }) {
     return (
       <form className="rounded flex flex-col space-y-5 p-2 sm:p-4">
         <div className="flex flex-col">
-          <label className="text-sm" htmlFor="instrument">
-            Instrument<span className="text-red-500">*</span>
-          </label>
-          <input
+          <TextField 
+            inputClass="w-full border border-neutral-300 rounded p-1 focus-within:outline-sky-500"
+            name='instrument'
+            value={chair.instrument}
+            onChange={(e) => handleChange(e)}
+          />
+          {/* <input
             className="border border-neutral-300 rounded p-1 focus-within:outline-sky-500"
             type="text"
             name="instrument"
             value={chair.instrument}
-            onChange={handleChange}
-          />
+            onChange={(e) => handleChange(e)}
+          /> */}
         </div>
         <div className="flex flex-col">
-          <label
-            htmlFor={selectChoice ? "level" : "grade"}
-            className="text-sm"
-            onClick={() => setSelectChoice(!selectChoice)}
-          >
-            {selectChoice ? "Level" : "Grade"}
-            <span className="text-red-500">*</span>
-          </label>
-          <select
-            className="border border-neutral-300 rounded p-1 focus-within:outline-sky-500"
+          <SelectField
             name={selectChoice ? "level" : "grade"}
-            value={selectChoice ? chair.level : chair.grade}
-            onChange={handleChange}
-          >
-            <option value="">-----</option>
-            {selectChoice
-              ? levels.map((level) => (
-                  <option key={level} value={level}>
-                    {level}
-                  </option>
-                ))
-              : Array.from({ length: 8 }, (_, index) => (
-                  <option key={8 - index} value={8 - index}>
-                    {8 - index}+
-                  </option>
-                ))}
-          </select>
+            value={selectChoice ? chair.level || null : chair.grade || null}
+            onChange={(e) => handleChange(e)}
+            options={
+              selectChoice
+                ? levelOptions
+                : Array.from({ length: 8 }, (_, index) => ({
+                    label: String(8 - index),
+                    value: String(8 - index),
+                  }))
+            }
+            inputClass="border border-neutral-300 rounded p-1 focus-within:outline-sky-500"
+          />
           <span
             className="text-xs hover:underline cursor-pointer"
             onClick={() => setSelectChoice(!selectChoice)}

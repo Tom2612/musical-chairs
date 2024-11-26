@@ -1,5 +1,4 @@
 import { Schema, model } from "mongoose";
-import { IChair } from "./chair.model";
 
 export interface IPiece {
     composer: string
